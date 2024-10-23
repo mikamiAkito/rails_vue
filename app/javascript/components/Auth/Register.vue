@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import InputError from '../v2/InputError.vue';
 // import { Head, Link, useForm } from '@inertiajs/vue3';
-import HeaderPage from '../v1/HeaderPage.vue';
 import SnsIcon from '../v2/SnsIcon.vue';
 import { RouterLink } from 'vue-router';
 import axios from 'axios';
@@ -30,19 +29,17 @@ const setCoverPhoto: (event: any) => void = event => {
 
 //ルーティング処理
 const submit: () => Promise<void> = async () => {
-  // FormDataオブジェクトを作成してファイルを追加します。
-  // const formData = new FormData();
 
-  // // 既存のフィールドを追加
-  // Object.entries(form).forEach(([key, value]) => {
-  //     formData.append(key, value);
-  // });
+	const userData = {
+		user: {
+		name: form.name,
+		email: form.email,
+		password: form.password,
+		password_confirmation: form.password_confirmation
+		}
+	};
 
-  // form.post(route('register'), {
-  //     body: formData,
-  //     onFinish: () => form.reset('password', 'password_confirmation'),
-  // });
-  await axios.post('/v1/users', form)
+  await axios.post('/v1/users', userData)
   .then((responce) => {
     console.log("レスポンス成功", [responce]);
   })
@@ -98,22 +95,22 @@ const submit: () => Promise<void> = async () => {
                   </div>
 
                   <!-- プロフィール画像アップロードフィールド -->
-                  <div>
+                  <!-- <div>
                       <label for="profile_photo" class="block text-sm font-medium text-gray-700 dark:text-white">
                           プロフィール画像
                       </label>
                       <input id="profile_photo" type="file" @change="setProfilePhoto" class="mt-1 dark:bg-slate-800 border dark:border-gray-500">
-                      <!-- <InputError class="mt-2" :message="form.errors.profile_photo" /> -->
-                  </div>
+                      <InputError class="mt-2" :message="form.errors.profile_photo" />
+                  </div> -->
 
                   <!-- 背景画像アップロードフィールド -->
-                  <div>
+                  <!-- <div>
                       <label for="cover_photo" class="block text-sm font-medium text-gray-700 dark:text-white">
                           背景画像
                       </label>
                       <input id="cover_photo" type="file" @change="setCoverPhoto" class="mt-1 dark:bg-slate-800 border dark:border-gray-500">
-                      <!-- <InputError class="mt-2" :message="form.errors.cover_photo" /> -->
-                  </div>
+                      <InputError class="mt-2" :message="form.errors.cover_photo" />
+                  </div> -->
 
                   <div>
                       <label for="password" class="block text-sm font-medium text-gray-700 dark:text-white">

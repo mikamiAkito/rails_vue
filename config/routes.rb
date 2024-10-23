@@ -4,8 +4,8 @@ Rails.application.routes.draw do
     !request.xhr? && request.format.html?
   end
 
-  get 'signup', to: 'users#new'
-  resources :users, except: [:new]
+  # get 'signup', to: 'users#new'
+  # resources :users, except: [:new]
 
   namespace :v1 do
     resources :users
