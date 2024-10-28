@@ -17,12 +17,17 @@ const form: {email: string, password: string, remember: boolean} = {
 };
 
 const submit: () => Promise<void> = async () => {
-  await axios.post('/v1/users', form)
+	await axios.post('/login', {
+		session: {//受け取り側のコントローラーのparamsと合わせる
+			email: form.email,
+			password: form.password,
+		}
+	})
 	.then((responce) => {
-		console.log("レスポンス成功", [responce]);
+		console.log("レスポンス成功", responce);
 	})
 	.catch((error) => {
-		console.log("レスポンス失敗", [error]);
+		console.log("レスポンス失敗", error);
 	});
 };
 </script>
