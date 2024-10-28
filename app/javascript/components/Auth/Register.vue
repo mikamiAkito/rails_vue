@@ -4,6 +4,7 @@ import InputError from '../v2/InputError.vue';
 import SnsIcon from '../v2/SnsIcon.vue';
 import { RouterLink } from 'vue-router';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 //フォーム情報
 const form: {
@@ -18,6 +19,9 @@ const form: {
     cover_photo: '',
     terms: false,
 };
+
+const route = useRouter();
+
 //ユーザー画像処理
 const setProfilePhoto: (event: any) => void = event => {
     form.profile_photo = event.target.files[0];
@@ -41,7 +45,11 @@ const submit: () => Promise<void> = async () => {
 
   await axios.post('/v1/users', userData)
   .then((responce) => {
-    console.log("レスポンス成功", [responce]);
+    console.log("レスポンス成功", [responce.data.id]);
+    route.push({
+        name: 'UserDtail',
+        params: {id: responce.data.id}//ルートとprops側の名前と合わせる
+    });
   })
   .catch((error) => {
     console.log("レスポンス失敗", [error]);
