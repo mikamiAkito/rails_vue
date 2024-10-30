@@ -2,15 +2,11 @@
 import { RouterLink } from 'vue-router';
 import { onMounted, ref , Ref} from "vue";
 import { watch } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import DarkMode from '../v2/DarkMode.vue';
 
-const props: {
-  readonly inLogin: boolean; readonly inRegister: boolean; readonly loginCheck: boolean;
-} = defineProps({
-  inLogin: Boolean,
-  inRegister: Boolean,
-  loginCheck: Boolean
-});
 const Hambarg: Ref<boolean> = ref(false);
+const auth = useAuthStore();
 
 onMounted(() => {
   //ページ遷移時スクロール無効化解除
@@ -31,7 +27,7 @@ watch(Hambarg as Ref<boolean>, (newValue: boolean) => {
   <div>
     <div class="bg-orange-600 absolute h-13 md:h-18 z-10 w-full grid grid-cols-3">
       <div class="grid justify-start items-center">
-        <!-- <DarkMode/> -->
+        <DarkMode/>
       </div>
       <div class="grid justify-center items-center">
         <RouterLink to="/" class="">
@@ -50,15 +46,15 @@ watch(Hambarg as Ref<boolean>, (newValue: boolean) => {
       </div>
       <div id="g-nav" v-show="Hambarg" class="fixed z-30 right-12 top-12"><!--v-bindが効いていないので修正必要-->
         <ul class="opacity-0 fixed top-6 md:top-12 right-4 md:right-7" :class="{'opacity-100':Hambarg}">
-          <div>
+          <div v-if="auth.isAuthenticated">
             <li class="cursor-pointer text-white hover:text-slate-300 duration-500 pb-2 font-black text-lg animate-gnaviAnime animate-duration-1000 animate-delay-200 animate-fill-forwards opacity-0">
-              <RouterLink to="" class="block w-24 text-base md:text-xl">プロフィール</RouterLink>
+              <RouterLink to="/users/:id" class="block w-24 text-base md:text-xl" @click="Hambarg = !Hambarg">プロフィール</RouterLink>
             </li>
             <li class="cursor-pointer text-white hover:text-slate-300 duration-500 pb-2 font-black text-lg animate-gnaviAnime animate-duration-1000 animate-delay-200 animate-fill-forwards opacity-0">
-              <RouterLink to="" class="block w-24 text-base md:text-xl">お気に入り</RouterLink>
+              <RouterLink to="" class="block w-24 text-base md:text-xl" @click="Hambarg = !Hambarg">お気に入り</RouterLink>
             </li>
           </div>
-          <li class="cursor-pointer text-white hover:text-slate-300 duration-500 pb-2 font-black text-lg animate-gnaviAnime animate-duration-1000 animate-delay-200 animate-fill-forwards opacity-0">
+          <li v-else class="cursor-pointer text-white hover:text-slate-300 duration-500 pb-2 font-black text-lg animate-gnaviAnime animate-duration-1000 animate-delay-200 animate-fill-forwards opacity-0">
             <RouterLink to="/Login" class="block w-24 text-base md:text-xl" @click="Hambarg = !Hambarg">ログイン</RouterLink>
           </li>
         </ul>
