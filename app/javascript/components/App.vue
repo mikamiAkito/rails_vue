@@ -2,6 +2,8 @@
 import { RouterView } from 'vue-router';
 import HeaderPage from './v1/HeaderPage.vue';
 import axios from 'axios';
+import { onMounted, Ref, ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
 //csrf設定
 const setupAxios: () => void = () => {
@@ -22,12 +24,17 @@ const setupAxios: () => void = () => {
     }
   );
 };
-setupAxios();
+
+const auth = useAuthStore();
+
+onMounted(() => {
+  setupAxios();
+  auth.initializeAuthState();
+});
 </script>
 
 <template>
   <div>
-    <!-- <HeaderPage :in-login="" :in-register="" :login-check=""></HeaderPage> -->
     <HeaderPage/>
   </div>
   <div>

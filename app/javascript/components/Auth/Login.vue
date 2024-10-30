@@ -4,6 +4,8 @@ import axios from 'axios';
 import { RouterLink } from 'vue-router';
 import InputError from '../v2/InputError.vue';
 import Checkbox from '../v2/Checkbox.vue';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
 
 defineProps({
 	canResetPassword: Boolean,
@@ -16,6 +18,9 @@ const form: {email: string, password: string, remember: boolean} = {
 	remember: false,
 };
 
+const auth = useAuthStore();
+const router = useRouter();
+
 const submit: () => Promise<void> = async () => {
 	await axios.post('/login', {
 		session: {//受け取り側のコントローラーのparamsと合わせる
@@ -25,9 +30,14 @@ const submit: () => Promise<void> = async () => {
 	})
 	.then((responce) => {
 		console.log("レスポンス成功", responce);
+		auth.setAuth(responce.data.user);
+		router.push({
+			name: "Home"
+		});
 	})
 	.catch((error) => {
 		console.log("レスポンス失敗", error);
+		auth.clearAuth();
 	});
 };
 </script>
