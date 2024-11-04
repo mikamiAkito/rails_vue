@@ -38,6 +38,6 @@ onMounted(() => {
     <HeaderPage/>
   </div>
   <div>
-    <RouterView></RouterView>
+    <RouterView/>
   </div>
 </template>

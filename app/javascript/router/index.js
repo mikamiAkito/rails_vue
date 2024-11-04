@@ -31,7 +31,7 @@ const routes = [
     path: '/users/:id',
     name: 'UserDtail',
     component: UserDtail,
-    props: true,
+    // props: true,//プロップスで受け取る場合
     meta: {requiresAuth: true},
   },
 ]
