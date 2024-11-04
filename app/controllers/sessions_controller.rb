@@ -20,7 +20,8 @@ class SessionsController < ApplicationController
     rescue => e
       render json: {
         status: :error,
-        message: "予期せぬエラーが発生しました"
+        item: e,
+        message: "ログイン中に予期せぬエラーが発生しました"
       }, status: :internal_server_error
     end
   end

@@ -5,28 +5,40 @@ import SnsIcon from '../v2/SnsIcon.vue';
 import { RouterLink } from 'vue-router';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+
+//型定義
+interface UserData {
+    name: string;
+    email: string;
+    password: string;
+    profile_photo: File | null;
+    cover_photo: File | null;
+    password_confirmation: string;
+}
 
 //フォーム情報
 const form: {
-      name: string, email: string, password: string, profile_photo: string,
-      password_confirmation: string, cover_photo: string, terms: boolean,
+      name: string, email: string, password: string, profile_photo: File | null,
+      password_confirmation: string, cover_photo: File | null, terms: boolean,
     } = {
     name: '',
     email: '',
     password: '',
-    profile_photo: '',
+    profile_photo: null,
     password_confirmation: '',
-    cover_photo: '',
+    cover_photo: null,
     terms: false,
 };
 
+const auth = useAuthStore();
 const route = useRouter();
 
-//ユーザー画像処理
+//ユーザー画像セット
 const setProfilePhoto: (event: any) => void = event => {
     form.profile_photo = event.target.files[0];
 };
-//プロフィール背景画像処理
+//プロフィール背景画像セット
 const setCoverPhoto: (event: any) => void = event => {
     form.cover_photo = event.target.files[0];
 };
@@ -34,25 +46,33 @@ const setCoverPhoto: (event: any) => void = event => {
 //ルーティング処理
 const submit: () => Promise<void> = async () => {
 
-	const userData = {
-		user: {
+    const formData: FormData = new FormData();
+
+	const userData: UserData = {
 		name: form.name,
 		email: form.email,
 		password: form.password,
+        profile_photo: form.profile_photo,
+        cover_photo: form.cover_photo,
 		password_confirmation: form.password_confirmation
-		}
 	};
 
-  await axios.post('/v1/users', userData)
+    Object.entries(userData).forEach(([key, value]) => {
+        formData.append(`user[${key}]`, value);//rails側のparamsのキー名と合わせる
+    });
+
+  await axios.post('/v1/users', formData)
   .then((responce) => {
-    console.log("レスポンス成功", [responce.data.id]);
+    console.log("レスポンス成功", [responce.data]);
+    auth.setAuth(responce.data);
     route.push({
-        name: 'UserDtail',
-        params: {id: responce.data.id}//ルートとprops側の名前と合わせる
+        name: 'Home',
+        // params: {id: responce.data.id}//ルートとprops側の名前と合わせる
     });
   })
   .catch((error) => {
     console.log("レスポンス失敗", [error]);
+    auth.clearAuth();
   });
 };
 </script>
@@ -84,7 +104,7 @@ const submit: () => Promise<void> = async () => {
                       </label>
                       <div class="mt-1">
                           <input id="name" name="name" type="name" autocomplete="name" required v-model="form.name"
-                              class="appearance-none rounded-md relative block w-full px-3 py-2 dark:bg-slate-800 border border-gray-300 dark:border-gray-500 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                              class="appearance-none rounded-md relative block dark:text-gray-300 w-full px-3 py-2 dark:bg-slate-800 border border-gray-300 dark:border-gray-500 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                               placeholder="名前を入力して下さい">
                           <!-- <InputError class="mt-2" :message="form.errors.name" /> -->
                       </div>
@@ -96,29 +116,29 @@ const submit: () => Promise<void> = async () => {
                       </label>
                       <div class="mt-1">
                           <input id="email" name="email" type="email" autocomplete="email" required v-model="form.email"
-                              class="appearance-none rounded-md relative block w-full px-3 py-2 dark:bg-slate-800 border border-gray-300 dark:border-gray-500 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                              class="appearance-none rounded-md relative block dark:text-gray-300 w-full px-3 py-2 dark:bg-slate-800 border border-gray-300 dark:border-gray-500 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                               placeholder="メールアドレスを入力して下さい">
                           <!-- <InputError class="mt-2" :message="form.errors.email" /> -->
                       </div>
                   </div>
 
                   <!-- プロフィール画像アップロードフィールド -->
-                  <!-- <div>
+                  <div>
                       <label for="profile_photo" class="block text-sm font-medium text-gray-700 dark:text-white">
                           プロフィール画像
                       </label>
-                      <input id="profile_photo" type="file" @change="setProfilePhoto" class="mt-1 dark:bg-slate-800 border dark:border-gray-500">
-                      <InputError class="mt-2" :message="form.errors.profile_photo" />
-                  </div> -->
+                      <input id="profile_photo" type="file" @change="setProfilePhoto" class="mt-1 dark:text-gray-300 dark:bg-slate-800 border dark:border-gray-500 w-full">
+                      <!-- <InputError class="mt-2" :message="form.errors.profile_photo" /> -->
+                  </div>
 
                   <!-- 背景画像アップロードフィールド -->
-                  <!-- <div>
+                  <div>
                       <label for="cover_photo" class="block text-sm font-medium text-gray-700 dark:text-white">
                           背景画像
                       </label>
-                      <input id="cover_photo" type="file" @change="setCoverPhoto" class="mt-1 dark:bg-slate-800 border dark:border-gray-500">
-                      <InputError class="mt-2" :message="form.errors.cover_photo" />
-                  </div> -->
+                      <input id="cover_photo" type="file" @change="setCoverPhoto" class="mt-1 dark:text-gray-300 dark:bg-slate-800 border dark:border-gray-500 w-full">
+                      <!-- <InputError class="mt-2" :message="form.errors.cover_photo" /> -->
+                  </div>
 
                   <div>
                       <label for="password" class="block text-sm font-medium text-gray-700 dark:text-white">
@@ -126,7 +146,7 @@ const submit: () => Promise<void> = async () => {
                       </label>
                       <div class="mt-1">
                           <input id="password" name="password" type="password" autocomplete="new-password" required v-model="form.password"
-                              class="appearance-none rounded-md relative block w-full px-3 py-2 dark:bg-slate-800 border border-gray-300 dark:border-gray-500 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                              class="appearance-none rounded-md relative block w-full px-3 py-2 dark:text-gray-300 dark:bg-slate-800 border border-gray-300 dark:border-gray-500 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                               placeholder="パスワードを入力して下さい">
                           <!-- <InputError class="mt-2" :message="form.errors.password" /> -->
                       </div>
@@ -138,7 +158,7 @@ const submit: () => Promise<void> = async () => {
                       </label>
                       <div class="mt-1">
                           <input id="password_confirmation" name="password_confirmation" type="password_confirmation" autocomplete="new-password" required v-model="form.password_confirmation"
-                              class="appearance-none rounded-md relative block w-full px-3 py-2 dark:bg-slate-800 border border-gray-300 dark:border-gray-500 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                              class="appearance-none rounded-md relative block w-full px-3 py-2 dark:text-gray-300 dark:bg-slate-800 border border-gray-300 dark:border-gray-500 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                               placeholder="もう一度入力して下さい">
                           <!-- <InputError class="mt-2" :message="form.errors.password_confirmation" /> -->
                       </div>

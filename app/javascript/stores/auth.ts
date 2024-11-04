@@ -7,6 +7,8 @@ interface User {
   id: number
   name: string
   email: string
+  profile_photo: string | null
+  cover_photo: string | null
   password_digest: string
 };
 interface AuthState {
