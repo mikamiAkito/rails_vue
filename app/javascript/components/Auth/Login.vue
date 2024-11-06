@@ -14,8 +14,8 @@ interface User {
   id: number
   name: string
   email: string
-  profile_photo: string | null
-  cover_photo: string | null
+  profile_photo: string | undefined
+  cover_photo: string | undefined
   password_digest: string
 };
 
@@ -35,8 +35,8 @@ const user: User = {
   id: 0,
   name: '',
   email: '',
-  profile_photo: null,
-  cover_photo: null,
+  profile_photo: undefined,
+  cover_photo: undefined,
   password_digest: '',
 };
 
