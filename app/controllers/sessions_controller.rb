@@ -8,7 +8,14 @@ class SessionsController < ApplicationController
         render json: {
           status: :success,
           message: "ログインに成功しました",
-          user: @user
+          id: @user.id,
+          name: @user.name,
+          email: @user.email,
+          password_digest: @user.password_digest,
+          profile_photo: @user.profile_photo_url,
+          cover_photo: @user.cover_photo_url,
+          created_at: @user.created_at,
+          updated_at: @user.updated_at
         }, status: :ok
       else
         render json: {

@@ -20,8 +20,8 @@ const userId: {
     id: number;
     name: string;
     email: string;
-    profile_photo: string | null;
-    cover_photo: string | null;
+    profile_photo: string | undefined;
+    cover_photo: string | undefined;
     password_digest: string;
 } | null = auth.user;
 
@@ -34,7 +34,7 @@ onMounted(() => {
   <div>
     <section class="w-full overflow-hidden dark:bg-gray-800">
       <div class="flex flex-col">
-        <!-- <UpdateImageForm :profile-photo-url="profilePhotoUrl" :cover-photo-url="coverPhotoUrl"/> -->
+        <UpdateImageForm :profile-photo-url="userId?.profile_photo" :cover-photo-url="userId?.cover_photo"/>
         <div
         class="xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] xs:w-[90%] mx-auto
         flex flex-col gap-4 items-center relative lg:-top-8 md:-top-6 sm:-top-4 xs:-top-4">

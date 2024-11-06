@@ -7,6 +7,18 @@ import Checkbox from '../v2/Checkbox.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 
+//型定義
+interface User {
+  created_at: string
+  updated_at: string
+  id: number
+  name: string
+  email: string
+  profile_photo: string | null
+  cover_photo: string | null
+  password_digest: string
+};
+
 defineProps({
 	canResetPassword: Boolean,
 	status: String,
@@ -16,6 +28,16 @@ const form: {email: string, password: string, remember: boolean} = {
 	email: '',
 	password: '',
 	remember: false,
+};
+const user: User = {
+	created_at: '',
+  updated_at: '',
+  id: 0,
+  name: '',
+  email: '',
+  profile_photo: null,
+  cover_photo: null,
+  password_digest: '',
 };
 
 const auth = useAuthStore();
@@ -30,7 +52,17 @@ const submit: () => Promise<void> = async () => {
 	})
 	.then((responce) => {
 		console.log("レスポンス成功", responce);
-		auth.setAuth(responce.data.user);
+
+		user.id = responce.data.id;
+		user.name = responce.data.name;
+		user.email = responce.data.email;
+		user.profile_photo = responce.data.profile_photo;
+		user.cover_photo = responce.data.cover_photo;
+		user.password_digest = responce.data.password_digest;
+		user.created_at = responce.data.created_at;
+		user.updated_at = responce.data.updated_at;
+
+		auth.setAuth(user);
 		router.push({
 			name: "Home"
 		});
