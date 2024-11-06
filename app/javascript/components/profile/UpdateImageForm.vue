@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 
-const props = defineProps({
+const props: {
+  profilePhotoUrl?: string | undefined;
+  coverPhotoUrl?: string | undefined;
+} = defineProps({
   profilePhotoUrl: String,
   coverPhotoUrl: String
 });
@@ -33,7 +36,7 @@ const coverbutton: () => void = () => {
 //       forceFormData: true,
 //       onSuccess: () => form.reset('profile_photo'),
 //     });
-//   } 
+//   }
 //   //背景画像
 //   if (field === 'cover_photo') {
 //     form.post(route('profile.image'), {
@@ -45,10 +48,10 @@ const coverbutton: () => void = () => {
 // };
 
 //データフォーム
-const form = useForm({
+const form = {
   profile_photo: null,
   cover_photo: null,
-});
+};
 </script>
 
 <template>
@@ -63,10 +66,10 @@ const form = useForm({
         </svg>
         <div>画像を選択</div>
       </button>
-      <input id="coverImage" type="file" class="hidden" @change="form.cover_photo = $event.target.files[0]; profileUpdate('cover_photo')">
+      <!-- <input id="coverImage" type="file" class="hidden" @change="form.cover_photo = $event.target.files[0]; profileUpdate('cover_photo')"> -->
     </div>
-    <InputError class="mt-2" :message="form.errors.profile_photo" />
-    <InputError class="mt-2" :message="form.errors.cover_photo" />
+    <!-- <InputError class="mt-2" :message="form.errors.profile_photo" />
+    <InputError class="mt-2" :message="form.errors.cover_photo" /> -->
     <!-- プロフィール画像 -->
     <div class="sm:w-[80%] xs:w-[90%] mx-auto flex relative">
       <img :src="props.profilePhotoUrl === '' ? defaultProfileUrl : props.profilePhotoUrl" alt="User Profile" class="rounded-md lg:w-[12rem] lg:h-[12rem] md:w-[10rem] md:h-[10rem] sm:w-[8rem] sm:h-[8rem] xs:w-[7rem] xs:h-[7rem] outline outline-2 outline-offset-2 outline-blue-500 relative lg:bottom-[5rem] sm:bottom-[4rem] xs:bottom-[3rem]" />
@@ -77,11 +80,11 @@ const form = useForm({
         </svg>
         <div>画像を選択</div>
       </button>
-      <input id="profileImage" type="file" class="hidden" @change="form.profile_photo = $event.target.files[0]; profileUpdate('profile_photo')">
+      <!-- <input id="profileImage" type="file" class="hidden" @change="form.profile_photo = $event.target.files[0]; profileUpdate('profile_photo')"> -->
       
       <!-- 名前 -->
       <h1 class="w-full text-left my-4 sm:mx-4 xs:pl-4 text-gray-800 dark:text-white lg:text-4xl md:text-3xl sm:text-3xl xs:text-xl font-serif">
-        {{ $page.props.auth.user.name }}
+        <!-- {{ $page.props.auth.user.name }} -->
       </h1>
     </div>
   </div>
