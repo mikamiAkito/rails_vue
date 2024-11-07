@@ -12,45 +12,66 @@ const props: {
 //デフォルト画像
 const defaultCoverUrl = '/img/background137.jpg';
 const defaultProfileUrl = '/img/original.jpg';
-const coverimage: HTMLElement | null = document.getElementById("coverImage");
-const profileimage: HTMLElement | null = document.getElementById("profileImage");
 
 const profilebutton: () => void = () => {
+  const profileimage: HTMLElement | null = document.getElementById("profileImage");
   if (profileimage) {
     profileimage.click();
   }
 }
 
 const coverbutton: () => void = () => {
+  const coverimage: HTMLElement | null = document.getElementById("coverImage");
   if (coverimage) {
     coverimage.click();
   }
 }
 
-// //画像アップデート処理
-// const profileUpdate = (field) => {
-//   //プロフィール画像
-//   if (field === 'profile_photo') {
-//     form.post(route('profile.image'), {
-//       preserveScroll: true,
-//       forceFormData: true,
-//       onSuccess: () => form.reset('profile_photo'),
-//     });
-//   }
-//   //背景画像
-//   if (field === 'cover_photo') {
-//     form.post(route('profile.image'), {
-//       preserveScroll: true,
-//       forceFormData: true,
-//       onSuccess: () => form.reset('cover_photo'),
-//     });
-//   }
-// };
+//画像アップデート処理
+const ImgChangeApi: (field: string) => void = (field) => {
+  //プロフィール画像
+  if (field === 'profile_photo') {
+    console.log("プロフィール編集",[form.profile_photo]);
+    // form.post(route('profile.image'), {
+    //   preserveScroll: true,
+    //   forceFormData: true,
+    //   onSuccess: () => form.reset('profile_photo'),
+    // });
+  }
+  //背景画像
+  if (field === 'cover_photo') {
+    console.log("背景編集",[form.cover_photo]);
+    // form.post(route('profile.image'), {
+    //   preserveScroll: true,
+    //   forceFormData: true,
+    //   onSuccess: () => form.reset('cover_photo'),
+    // });
+  }
+};
+
+//編集する画像を判定
+const profileUpdate: (event: Event) => void = (event) => {
+  const target = event.target as HTMLInputElement;
+  if(target.files) {
+    form.cover_photo = target.files[0];
+    ImgChangeApi('profile_photo');
+  }
+};
+const coverUpdate: (event: Event) => void = (event) => {
+  const target = event.target as HTMLInputElement;
+  if(target.files) {
+    form.cover_photo = target.files[0];
+    ImgChangeApi('cover_photo');
+  }
+};
 
 //データフォーム
-const form = {
+const form: {
+    profile_photo: File | null;
+    cover_photo: File | null;
+  } = {
   profile_photo: null,
-  cover_photo: null,
+  cover_photo: null
 };
 </script>
 
@@ -66,7 +87,7 @@ const form = {
         </svg>
         <div>画像を選択</div>
       </button>
-      <!-- <input id="coverImage" type="file" class="hidden" @change="form.cover_photo = $event.target.files[0]; profileUpdate('cover_photo')"> -->
+      <input id="coverImage" type="file" class="hidden" @change="coverUpdate">
     </div>
     <!-- <InputError class="mt-2" :message="form.errors.profile_photo" />
     <InputError class="mt-2" :message="form.errors.cover_photo" /> -->
@@ -80,7 +101,7 @@ const form = {
         </svg>
         <div>画像を選択</div>
       </button>
-      <!-- <input id="profileImage" type="file" class="hidden" @change="form.profile_photo = $event.target.files[0]; profileUpdate('profile_photo')"> -->
+      <input id="profileImage" type="file" class="hidden" @change="profileUpdate">
       
       <!-- 名前 -->
       <h1 class="w-full text-left my-4 sm:mx-4 xs:pl-4 text-gray-800 dark:text-white lg:text-4xl md:text-3xl sm:text-3xl xs:text-xl font-serif">
