@@ -1,6 +1,27 @@
 <script setup lang="ts">
+import axios from 'axios';
 import { onMounted } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
+//型定義
+interface ImageData {
+  profile_photo: File | null;
+  cover_photo: File | null;
+  imageflg: number | null;
+};
+
+interface User {
+  created_at: string
+  updated_at: string
+  id: number
+  name: string
+  email: string
+  profile_photo: string | undefined
+  cover_photo: string | undefined
+  password_digest: string
+};
+
+//親から受け取り
 const props: {
   profilePhotoUrl?: string | undefined;
   coverPhotoUrl?: string | undefined;
@@ -9,69 +30,103 @@ const props: {
   coverPhotoUrl: String
 });
 
+//データフォーム
+const form: {
+    profile_photo: File | null;
+    cover_photo: File | null;
+    imageflg: number | null;
+  } = {
+  profile_photo: null,
+  cover_photo: null,
+  imageflg: null
+};
+
+//pinia
+const auth = useAuthStore();
+const user: User = {
+	created_at: '',
+  updated_at: '',
+  id: 0,
+  name: '',
+  email: '',
+  profile_photo: undefined,
+  cover_photo: undefined,
+  password_digest: '',
+};
+
 //デフォルト画像
 const defaultCoverUrl = '/img/background137.jpg';
 const defaultProfileUrl = '/img/original.jpg';
 
+//編集するinputを選択
 const profilebutton: () => void = () => {
   const profileimage: HTMLElement | null = document.getElementById("profileImage");
   if (profileimage) {
     profileimage.click();
   }
-}
-
+};
 const coverbutton: () => void = () => {
   const coverimage: HTMLElement | null = document.getElementById("coverImage");
   if (coverimage) {
     coverimage.click();
   }
-}
+};
 
 //画像アップデート処理
-const ImgChangeApi: (field: string) => void = (field) => {
-  //プロフィール画像
-  if (field === 'profile_photo') {
-    console.log("プロフィール編集",[form.profile_photo]);
-    // form.post(route('profile.image'), {
-    //   preserveScroll: true,
-    //   forceFormData: true,
-    //   onSuccess: () => form.reset('profile_photo'),
-    // });
-  }
-  //背景画像
-  if (field === 'cover_photo') {
-    console.log("背景編集",[form.cover_photo]);
-    // form.post(route('profile.image'), {
-    //   preserveScroll: true,
-    //   forceFormData: true,
-    //   onSuccess: () => form.reset('cover_photo'),
-    // });
-  }
+const ImgChangeApi: () => void = async () => {
+
+  const formData: FormData = new FormData();
+
+  const ImageData: ImageData = {
+    profile_photo: form.profile_photo,
+    cover_photo: form.cover_photo,
+    imageflg: form.imageflg
+  };
+
+  Object.entries(ImageData).forEach(([key, value]) => {
+    if(key) {
+      formData.append(`user[${key}]`, value);//rails側のparamsのキー名と合わせる
+    }
+  });
+
+  console.log("プロフィール編集",[form.profile_photo]);
+  await axios.patch("/updateImg", formData)
+  .then((responce) => {
+    console.log("編集完了",[responce]);
+
+    user.id = responce.data.id;
+		user.name = responce.data.name;
+		user.email = responce.data.email;
+		user.profile_photo = responce.data.profile_photo;
+		user.cover_photo = responce.data.cover_photo;
+		user.password_digest = responce.data.password_digest;
+		user.created_at = responce.data.created_at;
+		user.updated_at = responce.data.updated_at;
+
+    auth.setAuth(user);
+    location.reload();
+  })
+  .catch((error) => {
+    console.log("編集失敗",[error]);
+  })
 };
 
 //編集する画像を判定
 const profileUpdate: (event: Event) => void = (event) => {
   const target = event.target as HTMLInputElement;
   if(target.files) {
-    form.cover_photo = target.files[0];
-    ImgChangeApi('profile_photo');
+    form.profile_photo = target.files[0];
+    form.imageflg = 1;
+    ImgChangeApi();
   }
 };
 const coverUpdate: (event: Event) => void = (event) => {
   const target = event.target as HTMLInputElement;
   if(target.files) {
     form.cover_photo = target.files[0];
-    ImgChangeApi('cover_photo');
+    form.imageflg = 2;
+    ImgChangeApi();
   }
-};
-
-//データフォーム
-const form: {
-    profile_photo: File | null;
-    cover_photo: File | null;
-  } = {
-  profile_photo: null,
-  cover_photo: null
 };
 </script>
 

@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   end
 
   post "login", to: "sessions#create"
+  patch "updateImg", to: "images#update"
 end
