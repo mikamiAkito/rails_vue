@@ -34,7 +34,26 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out
-    redirect_to root_path, status: :see_other
+    begin
+      if logged_in?
+        log_out
+        render json: {
+          status: :success,
+          message: "ログアウトしました"
+        }, status: :ok
+      else
+        render json: {
+          status: :error,
+          message: "既にログアウトしています"
+        }, status: :bad_request
+      end
+    rescue => e
+      Rails.logger.error "ログアウトエラー#{e.message}"
+      render json: {
+        status: :error,
+        item: e,
+        message: "ログアウト処理中にエラーが発生しました"
+      }, status: :internal_server_error
+    end
   end
 end

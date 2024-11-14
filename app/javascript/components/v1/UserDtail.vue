@@ -5,6 +5,7 @@ import UpdatePasswordForm from '../profile/UpdatePasswordForm.vue';
 import UpdateImageForm from '../profile/UpdateImageForm.vue';
 import HeaderPage from './HeaderPage.vue';
 import { useAuthStore } from '@/stores/auth';
+import LogoutForm from '../Auth/LogoutForm.vue';
 
 //プロップスではなくpiniaから取得
 // const props: {
@@ -62,7 +63,7 @@ onMounted(() => {
                         <div class="p-4 sm:p-8 bg-white dark:bg-gray-800">
                         </div>
                         <div class="flex flex-col py-3">
-                            <!-- <LogoutForm/> -->
+                            <LogoutForm/>
                         </div>
                         <div class="flex flex-col py-3">
                             <!-- <DeleteUserForm class="max-w-xl" /> -->
