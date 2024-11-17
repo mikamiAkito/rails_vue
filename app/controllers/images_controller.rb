@@ -15,7 +15,6 @@ class ImagesController < ApplicationController
       end
 
       if @user.update(update_image)
-        image_url = imageFlg.to_i == 1 ? @user.profile_photo_url : @user.cover_photo_url
         render json: {
           status: :success,
           message: "画像がアップロードされました",
