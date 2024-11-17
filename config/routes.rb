@@ -11,7 +11,11 @@ Rails.application.routes.draw do
     resources :users
   end
 
+  #sessionコントローラー
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
+  #imageコントローラー
   patch "updateImg", to: "images#update"
+  #passwordコントローラー
+  patch "updatedpassword", to: "password#update"
 end

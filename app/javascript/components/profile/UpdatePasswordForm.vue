@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import axios from 'axios';
 import InputError from '../v2/InputError.vue';
 import InputLabel from '../v2/InputLabel.vue';
 import PrimaryButton from '../v2/PrimaryButton.vue';
@@ -10,8 +11,6 @@ interface FormType {
   current_password: string,
   password: string,
   password_confirmation: string,
-  processing: string,
-  recentlySuccessful: string,
 };
 
 const passwordInput: Ref<any> = ref(null);
@@ -20,11 +19,16 @@ const form: FormType = {
   current_password: '',
   password: '',
   password_confirmation: '',
-  processing: '',
-  recentlySuccessful: '',
 }
 
-const updatePassword: () => void = () => {
+const updatePasswordApi: () => void = async () => {
+  await axios.patch("/updatedpassword", {user: form})
+  .then((responce) => {
+    console.log(responce.data.message);
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
 }
 </script>
 
@@ -38,7 +42,7 @@ const updatePassword: () => void = () => {
       </p>
     </header>
 
-    <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
+    <form @submit.prevent="updatePasswordApi" class="mt-6 space-y-6">
       <div>
         <InputLabel for="current_password" value="現在のパスワード" />
 
@@ -70,7 +74,7 @@ const updatePassword: () => void = () => {
       </div>
 
       <div>
-        <InputLabel for="password_confirmation" value="パスワード認証" />
+        <InputLabel for="password_confirmation" value="パスワードの確認" />
 
         <TextInput
           id="password_confirmation"
@@ -84,11 +88,11 @@ const updatePassword: () => void = () => {
       </div>
 
       <div class="flex items-center gap-4">
-        <!-- <PrimaryButton :disabled="form.processing">更新</PrimaryButton> -->
-
-        <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
-            <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
-        </Transition>
+        <button
+        type="submit"
+        class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-gray-400 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+          更新
+        </button>
       </div>
     </form>
   </section>
