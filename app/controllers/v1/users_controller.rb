@@ -49,8 +49,35 @@ module V1
     end
 
     def destroy
-      @user.destroy
-      redirect_to users_url, notice: "アカウントを削除しました。", status: :see_other
+      begin
+        @user = current_user
+        password = params[:password]
+        if @user.authenticate(password)
+          if @user.destroy
+            render json: {
+              status: :success,
+              message: "アカウントを削除しました",
+            }, status: 201
+          else
+            render json: {
+              status: :error,
+              message: "アカウント削除中にエラーが発生しました",
+            }, status: 401
+          end
+        else
+          render json: {
+            status: :error,
+            message: "パスワードが正しくありません",
+          }, status: 401
+        end
+      rescue => e
+        Rails.logger.debug"アカウント削除確認 #{e}"
+        render json: {
+          status: :error,
+          message: "アカウント削除処理エラー",
+          errors: e.message
+        }, status: 404
+      end
     end
 
     private

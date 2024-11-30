@@ -5,6 +5,8 @@ import InputLabel from '../v2/InputLabel.vue';
 import PrimaryButton from '../v2/PrimaryButton.vue';
 import TextInput from '../v2/TextInput.vue';
 import { Ref, ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
 
 //型定義
 interface FormType {
@@ -13,6 +15,8 @@ interface FormType {
   password_confirmation: string,
 };
 
+const router = useRouter();
+const auth = useAuthStore();
 const passwordInput: Ref<any> = ref(null);
 const currentPasswordInput: Ref<any> = ref(null);
 const form: FormType = {
@@ -25,9 +29,37 @@ const updatePasswordApi: () => void = async () => {
   await axios.patch("/updatedpassword", {user: form})
   .then((responce) => {
     console.log(responce.data.message);
+    alert("パスワードを更新しました");
+    location.reload();
   })
   .catch((error) => {
-    console.log(error.message);
+    console.log(error);
+    switch(error.status) {
+      case 422:
+        if(error.code == 1) {
+          error.response.data.message = "パスワードの更新でエラーが発生しました";
+        };
+        alert(error.response.data.message);
+      break;
+      case 404:
+        axios.delete('/logout')
+        .then((responce) => {
+          console.log(responce.data.message);
+          auth.clearAuth();
+          router.push({
+            name: 'Home'
+          });
+        })
+        .catch((error) => {
+          console.log("エラーが発生しました",[error]);
+        });
+        alert(error.response.data.message);
+      break;
+      default:
+        alert(error.response.data.message);
+      break;
+    };
+    location.reload();
   });
 }
 </script>

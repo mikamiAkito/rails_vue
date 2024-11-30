@@ -70,6 +70,7 @@ const submit: () => Promise<void> = async () => {
 	.catch((error) => {
 		console.log("レスポンス失敗", error);
 		auth.clearAuth();
+		alert(error.response.data.message);
 	});
 };
 </script>

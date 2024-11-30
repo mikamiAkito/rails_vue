@@ -13,20 +13,22 @@ class PasswordController < ApplicationController
           else
             render json: {
               status: :error,
-              message: @user.errors.full_messages
-            }, status: :unprocessable_entity
+              message: @user.errors.full_messages,
+              code: 1
+            }, status: 422
           end
         else
           render json: {
             status: :error,
-            message: "新しいパスワードと確認用パスワードが一致しません"
-          }, status: :unprocessable_entity
+            message: "新しいパスワードと確認用パスワードが一致しません",
+            code: 2
+          }, status: 422
         end
       else
         render json: {
           status: :error,
-          message: "現在のパスワードが正しくありません"
-        }, status: :unauthorized
+          message: "現在のパスワードが正しくありません",
+        }, status: 401
       end
 
     rescue => e
@@ -35,8 +37,8 @@ class PasswordController < ApplicationController
       render json: {
         status: :error,
         message: "現在のパスワードが正しくありません",
-        error: e.message
-      }, status: :internal_server_error
+        error: e.message,
+      }, status: 500
     end
   end
 
@@ -46,8 +48,8 @@ class PasswordController < ApplicationController
     if @user.nil?
       render json: {
         status: :error,
-        message: "ユーザーが見つかりません"
-      }, status: :not_found
+        message: "ユーザーが見つかりません",
+      }, status: 404
     end
   end
 

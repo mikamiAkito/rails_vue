@@ -6,6 +6,7 @@ import UpdateImageForm from '../profile/UpdateImageForm.vue';
 import HeaderPage from './HeaderPage.vue';
 import { useAuthStore } from '@/stores/auth';
 import LogoutForm from '../Auth/LogoutForm.vue';
+import DeleteUserForm from '../profile/DeleteUserForm.vue';
 
 //プロップスではなくpiniaから取得
 // const props: {
@@ -66,7 +67,7 @@ onMounted(() => {
                             <LogoutForm/>
                         </div>
                         <div class="flex flex-col py-3">
-                            <!-- <DeleteUserForm class="max-w-xl" /> -->
+                            <DeleteUserForm class="max-w-xl" />
                         </div>
                     </div>
                 </dl>
