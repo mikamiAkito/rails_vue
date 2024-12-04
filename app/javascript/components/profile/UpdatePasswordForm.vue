@@ -17,6 +17,7 @@ interface FormType {
 
 const router = useRouter();
 const auth = useAuthStore();
+let buttonFlg: Ref<boolean> = ref(true);
 const passwordInput: Ref<any> = ref(null);
 const currentPasswordInput: Ref<any> = ref(null);
 const form: FormType = {
@@ -24,6 +25,12 @@ const form: FormType = {
   password: '',
   password_confirmation: '',
 }
+
+const buttonActive: () => void = () => {
+  if(form.current_password && form.password && form.password_confirmation) {
+    buttonFlg.value = false;
+  }
+};
 
 const updatePasswordApi: () => void = async () => {
   await axios.patch("/updatedpassword", {user: form})
@@ -85,6 +92,7 @@ const updatePasswordApi: () => void = async () => {
           type="password"
           class="mt-1 block w-full"
           autocomplete="current-password"
+          @change="buttonActive"
         />
 
         <!-- <InputError :message="form.errors.current_password" class="mt-2" /> -->
@@ -100,6 +108,7 @@ const updatePasswordApi: () => void = async () => {
           type="password"
           class="mt-1 block w-full"
           autocomplete="new-password"
+          @change="buttonActive"
         />
 
         <!-- <InputError :message="form.errors.password" class="mt-2" /> -->
@@ -114,6 +123,7 @@ const updatePasswordApi: () => void = async () => {
           type="password"
           class="mt-1 block w-full"
           autocomplete="new-password"
+          @change="buttonActive"
         />
 
         <!-- <InputError :message="form.errors.password_confirmation" class="mt-2" /> -->
@@ -121,6 +131,7 @@ const updatePasswordApi: () => void = async () => {
 
       <div class="flex items-center gap-4">
         <button
+        :disabled="buttonFlg"
         type="submit"
         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-gray-400 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
           更新
