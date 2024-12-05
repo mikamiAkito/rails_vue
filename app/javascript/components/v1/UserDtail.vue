@@ -2,6 +2,7 @@
 import { onMounted, ref, Ref } from 'vue';
 import { Router, useRouter } from 'vue-router';
 import UpdatePasswordForm from '../profile/UpdatePasswordForm.vue';
+import UpdateProfileInformationForm from '../profile/UpdateProfileInformationForm.vue';
 import UpdateImageForm from '../profile/UpdateImageForm.vue';
 import HeaderPage from './HeaderPage.vue';
 import { useAuthStore } from '@/stores/auth';
@@ -50,11 +51,9 @@ onMounted(() => {
                   </div>
                   <div class="flex flex-col pb-3">
                     <!-- <DangerButton :href="route('logout')" method="post" as="button">logout</DangerButton> -->
-                    <!-- <UpdateProfileInformationForm
-                        :must-verify-email="mustVerifyEmail"
-                        :status="status"
+                    <UpdateProfileInformationForm
                         class="max-w-xl"
-                    /> -->
+                    />
                   </div>
                 </dl>
               </div>

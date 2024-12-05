@@ -18,4 +18,6 @@ Rails.application.routes.draw do
   patch "updateImg", to: "images#update"
   #passwordコントローラー
   patch "updatedpassword", to: "password#update"
+  #profileコントローラー
+  patch "updateprofile", to: "profiles#update"
 end
