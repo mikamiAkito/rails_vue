@@ -44,7 +44,6 @@ const props = defineProps({
 });
 
 const updateprofileApi: () => void = async () => {
-    alert("プロフィール編集開始");
     const form: profileparams = {
         name: userName.value,
         email: userEmail.value
@@ -88,7 +87,7 @@ watch([userName, userEmail], ([newName, newEmail], [oldName, oldEmail]) => {
             <h2 class="text-lg font-medium text-gray-900 dark:text-white">プロフィール情報</h2>
 
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Update your account's profile information and email address.
+                アカウントのプロフィール情報とメールアドレスを更新します。
             </p>
         </header>
 
@@ -126,7 +125,7 @@ watch([userName, userEmail], ([newName, newEmail], [oldName, oldEmail]) => {
 
             <div>
                 <p class="text-sm mt-2 text-gray-800">
-                    Your email address is unverified.
+                    あなたのメールアドレスは未確認です。
                     <!-- <Link
                         :href=""
                         method="post"
@@ -141,7 +140,7 @@ watch([userName, userEmail], ([newName, newEmail], [oldName, oldEmail]) => {
                     v-show="props.status === 'verification-link-sent'"
                     class="mt-2 font-medium text-sm text-green-600"
                 >
-                    A new verification link has been sent to your email address.
+                    新しい確認リンクがあなたのメールアドレスに送信されました。
                 </div>
             </div>
 

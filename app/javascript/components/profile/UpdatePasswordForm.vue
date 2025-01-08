@@ -77,7 +77,7 @@ const updatePasswordApi: () => void = async () => {
       <h2 class="text-lg font-medium text-gray-900 dark:text-white">パスワード更新</h2>
 
       <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-        Ensure your account is using a long, random password to stay secure.
+        安全を保つために、ランダムなパスワードを使用していることを確認してください。
       </p>
     </header>
 

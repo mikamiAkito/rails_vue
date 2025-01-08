@@ -55,8 +55,7 @@ const closeModal: () => void = () => {
             <h2 class="text-lg font-medium text-gray-900 dark:text-white">アカウントを削除</h2>
 
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-500">
-                Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting
-                your account, please download any data or information that you wish to retain.
+                アカウントを削除すると、そのリソースとデータはすべて永久に削除されます。アカウントを削除する前に、保持したいデータや情報をダウンロードしてください。
             </p>
         </header>
 
