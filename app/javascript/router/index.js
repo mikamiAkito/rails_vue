@@ -3,6 +3,7 @@ import Home from '../components/v1/Home.vue'
 import Register from '../components/Auth/Register.vue'
 import Login from '../components/Auth/Login.vue'
 import UserDtail from '../components/v1/UserDtail.vue'
+import BookMarkList from '../components/v1/BookMarkList.vue'
 import App from '../components/App.vue'
 import { useAuthStore } from '../stores/auth.ts'//import名に{}をつけないとエラーが発生する
 
@@ -34,6 +35,13 @@ const routes = [
     // props: true,//プロップスで受け取る場合
     meta: {requiresAuth: true},
   },
+
+  {
+    path: '/BookMarkList',
+    name: 'BookMarkList',
+    component: BookMarkList,
+    meta: {requiresAuth: true},
+  }
 ]
 
 const router = createRouter({

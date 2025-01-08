@@ -51,7 +51,7 @@ watch(Hambarg as Ref<boolean>, (newValue: boolean) => {
               <RouterLink to="/users/:id" class="block w-24 text-base md:text-xl" @click="Hambarg = !Hambarg">プロフィール</RouterLink>
             </li>
             <li class="cursor-pointer text-white hover:text-slate-300 duration-500 pb-2 font-black text-lg animate-gnaviAnime animate-duration-1000 animate-delay-200 animate-fill-forwards opacity-0">
-              <RouterLink to="" class="block w-24 text-base md:text-xl" @click="Hambarg = !Hambarg">お気に入り</RouterLink>
+              <RouterLink to="/BookMarkList" class="block w-24 text-base md:text-xl" @click="Hambarg = !Hambarg">お気に入り</RouterLink>
             </li>
           </div>
           <li v-else class="cursor-pointer text-white hover:text-slate-300 duration-500 pb-2 font-black text-lg animate-gnaviAnime animate-duration-1000 animate-delay-200 animate-fill-forwards opacity-0">
