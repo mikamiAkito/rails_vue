@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, Ref } from 'vue';
+import GoogleMap from '@/components/v1/GoogleMap.vue';
 
 const topButtonOpacity: Ref<boolean> = ref(false);
 
@@ -10,9 +11,7 @@ const topScrollButton = (): void => {
 </script>
 
 <template>
-  <div class="text-green-700 absolute top-32">
-    こちらはホームです
-  </div>
+  <GoogleMap/>
   <div id="top_button" class="fixed -bottom-14 right-3 duration-700 opacity-0 hover:animate-pulse animate-duration-1000 z-10"
   :class="{
     'opacity-100':topButtonOpacity,
